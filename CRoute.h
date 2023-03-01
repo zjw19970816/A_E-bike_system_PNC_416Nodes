@@ -15,7 +15,7 @@ public:
 	//Route cost
 	//double FreeFlowTravelTime; // Free Flow Travel time
 	double FreeFlowTravelSpeed = 15; // Free Flow Travel speed
-	double Capacity = 200; // Route capacity
+	double Capacity = 2000; // Route capacity
 	double Pickupdistance;
 	double Ridingdistance;
 	double RentalCost;

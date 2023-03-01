@@ -20,8 +20,9 @@ int main(int argc, char** argv)
 	Network->ReadLink("Link_example_416Nodes.txt");
 	Network->ReadDistance("DepotNode_example_416Nodes.txt");
 	Network->ReadODpairs("ODPairs_example_416Nodes.txt");
+	//system("pause");
 	Network->GAProgram();
-	system("pause");
+
 	delete Network;	//释放堆区
 
 	end = clock();   //结束时间

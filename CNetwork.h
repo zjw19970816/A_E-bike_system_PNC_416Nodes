@@ -50,7 +50,7 @@ public:
 	double gama = 0.05; //1.5
 	vector<double> LinkTravelTime; //路段走行时间
 	//double MaxUEGap = 1.0e-4; //UE的最大误差 
-	double MaxUEGap = 10000; //UE的最大误差 
+	double MaxUEGap = 1; //UE的最大误差 
 	double UEGap; //UE误差
 	double* ShortestPathCost;//临时变量，所有节点到起点的最短路 free
 	int* ShortestPathParent;//最短路上，所有节点到起点的在最短路上的前继路段  free
@@ -135,34 +135,34 @@ public:
 	void GAProgram(); 
 
 
-private:
-	//void strcpy(char* strs, string name);
-	inline bool exists(const std::string name)
-	{
-		ifstream f(name.c_str());
-		return f.good();
-	}
-
-	vector<string> split(const string& str, const string& delim)
-	{
-		vector<string> res;
-		if ("" == str) return res;
-		//先将要切割的字符串从string类型转换为char*类型  
-		char* strs = new char[str.length() + 1]; //不要忘了  
-		strcpy(strs, str.c_str());
-
-		char* d = new char[delim.length() + 1];
-		strcpy(d, delim.c_str());
-
-		char* p = strtok(strs, d);
-		while (p)
-		{
-			string s = p; //分割得到的字符串转换为string类型  
-			res.push_back(s); //存入结果数组  
-			p = strtok(NULL, d);
-		}
-
-		return res;
-	}
+//private:
+//	//void strcpy(char* strs, string name);
+//	inline bool exists(const std::string name)
+//	{
+//		ifstream f(name.c_str());
+//		return f.good();
+//	}
+//
+//	vector<string> split(const string& str, const string& delim)
+//	{
+//		vector<string> res;
+//		if ("" == str) return res;
+//		//先将要切割的字符串从string类型转换为char*类型  
+//		char* strs = new char[str.length() + 1]; //不要忘了  
+//		strcpy(strs, str.c_str());
+//
+//		char* d = new char[delim.length() + 1];
+//		strcpy(d, delim.c_str());
+//
+//		char* p = strtok(strs, d);
+//		while (p)
+//		{
+//			string s = p; //分割得到的字符串转换为string类型  
+//			res.push_back(s); //存入结果数组  
+//			p = strtok(NULL, d);
+//		}
+//
+//		return res;
+//	}
 };
 

@@ -36,9 +36,6 @@
     <ClCompile Include="MainProgram.cpp">
       <Filter>Header Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Header Files\Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLink.h">
