@@ -1027,7 +1027,7 @@ void CNetwork::GenerateRoute()
 	for (int origin = 0; origin < m_nOrigin; origin++) //取一个OD pair起点
 	{
 		m_Origin[origin]; //OD pair起点（包含终点）
-		for (int destination = 0; destination < m_Origin[origin]->DestinationNode.size(); destination++) //取一个终点
+		for (int destination = 0; destination < m_Origin[origin]->DestinationNode.size(); destination++) //取一个OD pair终点
 		{
 			int m_nRoute_temp = m_nRoute;
 			//生成一条虚拟route, 保证每一对OD可以出行
@@ -1070,74 +1070,83 @@ void CNetwork::GenerateRoute()
 								{
 									if (m_Node[dropnode]->NodeType[type2] == 1) //在parking node还车
 									{
-										pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-										pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-										pRoute->PickupNode = m_Node[picknode];
-										pRoute->DropoffNode = m_Node[dropnode];
-										pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-										pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-										//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 										double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-										double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-										//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 										double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-										pRoute->Pickupdistance = PickupWalkingDistance;
-										pRoute->Ridingdistance = RidingDistance;
-										pRoute->EnergyConsumption = arfa3 * RidingDistance;
-										pRoute->Dropoffdistance = DropoffWalkingDistance;
-										if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+										if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 										{
-											pRoute->RouteID = m_nRoute; //Route number
-											m_nRoute++;
-											m_Route.push_back(pRoute);
+											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+											pRoute->PickupNode = m_Node[picknode];
+											pRoute->DropoffNode = m_Node[dropnode];
+											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+											pRoute->Pickupdistance = PickupWalkingDistance;
+											pRoute->Ridingdistance = RidingDistance;
+											pRoute->EnergyConsumption = arfa3 * RidingDistance;
+											pRoute->Dropoffdistance = DropoffWalkingDistance;
+											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											{
+												pRoute->RouteID = m_nRoute; //Route number
+												m_nRoute++;
+												m_Route.push_back(pRoute);
+											}
 										}
 									}
 									if (m_Node[dropnode]->NodeType[type2] == 2) //在plug-in charging station还车
 									{
-										pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-										pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-										pRoute->PickupNode = m_Node[picknode];
-										pRoute->DropoffNode = m_Node[dropnode];
-										pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-										pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-										//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 										double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-										double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-										//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 										double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-										pRoute->Pickupdistance = PickupWalkingDistance;
-										pRoute->Ridingdistance = RidingDistance;
-										pRoute->EnergyConsumption = arfa3 * RidingDistance;
-										pRoute->Dropoffdistance = DropoffWalkingDistance;
-										if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+										if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 										{
-											pRoute->RouteID = m_nRoute; //Route number
-											m_nRoute++;
-											m_Route.push_back(pRoute);
+											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+											pRoute->PickupNode = m_Node[picknode];
+											pRoute->DropoffNode = m_Node[dropnode];
+											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+											pRoute->Pickupdistance = PickupWalkingDistance;
+											pRoute->Ridingdistance = RidingDistance;
+											pRoute->EnergyConsumption = arfa3 * RidingDistance;
+											pRoute->Dropoffdistance = DropoffWalkingDistance;
+											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											{
+												pRoute->RouteID = m_nRoute; //Route number
+												m_nRoute++;
+												m_Route.push_back(pRoute);
+											}
 										}
 									}
 									if (m_Node[dropnode]->NodeType[type2] == 3) //在non-parking node还车
 									{
-										pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-										pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-										pRoute->PickupNode = m_Node[picknode];
-										pRoute->DropoffNode = m_Node[dropnode];
-										pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-										pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-										//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 										double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-										double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-										//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 										double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-										pRoute->Pickupdistance = PickupWalkingDistance;
-										pRoute->Ridingdistance = RidingDistance;
-										pRoute->EnergyConsumption = arfa3 * RidingDistance;
-										pRoute->Dropoffdistance = DropoffWalkingDistance;
-										if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+										if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 										{
-											pRoute->RouteID = m_nRoute; //Route number
-											m_nRoute++;
-											m_Route.push_back(pRoute);
+											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+											pRoute->PickupNode = m_Node[picknode];
+											pRoute->DropoffNode = m_Node[dropnode];
+											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+											pRoute->Pickupdistance = PickupWalkingDistance;
+											pRoute->Ridingdistance = RidingDistance;
+											pRoute->EnergyConsumption = arfa3 * RidingDistance;
+											pRoute->Dropoffdistance = DropoffWalkingDistance;
+											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											{
+												pRoute->RouteID = m_nRoute; //Route number
+												m_nRoute++;
+												m_Route.push_back(pRoute);
+											}
 										}
 									}
 								}
@@ -1156,74 +1165,83 @@ void CNetwork::GenerateRoute()
 									{
 										if (m_Node[dropnode]->NodeType[type2] == 1) //在parking node还车
 										{
-											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-											pRoute->PickupNode = m_Node[picknode];
-											pRoute->DropoffNode = m_Node[dropnode];
-											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 											double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 											double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-											pRoute->Pickupdistance = PickupWalkingDistance;
-											pRoute->Ridingdistance = RidingDistance;
-											pRoute->EnergyConsumption = arfa3 * RidingDistance;
-											pRoute->Dropoffdistance = DropoffWalkingDistance;
-											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 											{
-												pRoute->RouteID = m_nRoute; //Route number
-												m_nRoute++;
-												m_Route.push_back(pRoute);
+												pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+												pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+												pRoute->PickupNode = m_Node[picknode];
+												pRoute->DropoffNode = m_Node[dropnode];
+												pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+												pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+												//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+												double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+												//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+												pRoute->Pickupdistance = PickupWalkingDistance;
+												pRoute->Ridingdistance = RidingDistance;
+												pRoute->EnergyConsumption = arfa3 * RidingDistance;
+												pRoute->Dropoffdistance = DropoffWalkingDistance;
+												if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+												{
+													pRoute->RouteID = m_nRoute; //Route number
+													m_nRoute++;
+													m_Route.push_back(pRoute);
+												}
 											}
 										}
 										if (m_Node[dropnode]->NodeType[type2] == 2) //在plug-in charging station还车
 										{
-											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-											pRoute->PickupNode = m_Node[picknode];
-											pRoute->DropoffNode = m_Node[dropnode];
-											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 											double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 											double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-											pRoute->Pickupdistance = PickupWalkingDistance;
-											pRoute->Ridingdistance = RidingDistance;
-											pRoute->EnergyConsumption = arfa3 * RidingDistance;
-											pRoute->Dropoffdistance = DropoffWalkingDistance;
-											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 											{
-												pRoute->RouteID = m_nRoute; //Route number
-												m_nRoute++;
-												m_Route.push_back(pRoute);
+												pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+												pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+												pRoute->PickupNode = m_Node[picknode];
+												pRoute->DropoffNode = m_Node[dropnode];
+												pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+												pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+												//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+												double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+												//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+												pRoute->Pickupdistance = PickupWalkingDistance;
+												pRoute->Ridingdistance = RidingDistance;
+												pRoute->EnergyConsumption = arfa3 * RidingDistance;
+												pRoute->Dropoffdistance = DropoffWalkingDistance;
+												if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+												{
+													pRoute->RouteID = m_nRoute; //Route number
+													m_nRoute++;
+													m_Route.push_back(pRoute);
+												}
 											}
 										}
 										if (m_Node[dropnode]->NodeType[type2] == 3) //在non-parking node还车
 										{
-											pRoute = new CRoute();//对 每一对ODpair，创建一个route class
-											pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
-											pRoute->PickupNode = m_Node[picknode];
-											pRoute->DropoffNode = m_Node[dropnode];
-											pRoute->PickupType = m_Node[picknode]->NodeType[type1];
-											pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
-											//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
 											double PickupWalkingDistance = NodeDistance[m_Origin[origin]->pOriginNode->ID][m_Node[picknode]->ID];
-											double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
-											//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
 											double DropoffWalkingDistance = NodeDistance[m_Node[dropnode]->ID][m_Origin[origin]->DestinationNode[destination]];
-											pRoute->Pickupdistance = PickupWalkingDistance;
-											pRoute->Ridingdistance = RidingDistance;
-											pRoute->EnergyConsumption = arfa3 * RidingDistance;
-											pRoute->Dropoffdistance = DropoffWalkingDistance;
-											if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+											if (PickupWalkingDistance <= 1 && DropoffWalkingDistance <= 1)
 											{
-												pRoute->RouteID = m_nRoute; //Route number
-												m_nRoute++;
-												m_Route.push_back(pRoute);
+												pRoute = new CRoute();//对 每一对ODpair，创建一个route class
+												pRoute->ODID = m_Origin[origin]->ODpairNumber[destination];//OD pair number
+												pRoute->PickupNode = m_Node[picknode];
+												pRoute->DropoffNode = m_Node[dropnode];
+												pRoute->PickupType = m_Node[picknode]->NodeType[type1];
+												pRoute->DropoffType = m_Node[dropnode]->NodeType[type2];
+												//cout << pRoute->PickupNode->ID << pRoute->DropoffNode->ID << endl;
+												double RidingDistance = NodeDistance[m_Node[picknode]->ID][m_Node[dropnode]->ID];
+												//cout << m_Node[picknode]->ID << " " << m_Node[dropnode]->ID << " " << RidingDistance << endl;
+												pRoute->Pickupdistance = PickupWalkingDistance;
+												pRoute->Ridingdistance = RidingDistance;
+												pRoute->EnergyConsumption = arfa3 * RidingDistance;
+												pRoute->Dropoffdistance = DropoffWalkingDistance;
+												if (PickupWalkingDistance < INF && RidingDistance < INF && DropoffWalkingDistance < INF)
+												{
+													pRoute->RouteID = m_nRoute; //Route number
+													m_nRoute++;
+													m_Route.push_back(pRoute);
+												}
 											}
 										}
 									}
@@ -1240,22 +1258,22 @@ void CNetwork::GenerateRoute()
 		}
 	}
 
-	//调整route数量
-	for (int origin = 0; origin < m_nOrigin; origin++) // 遍历origin的循环all or nothing
-	{
-		//int OriginNode = m_Origin[origin]->pOriginNode->ID; // 任意一个origin的编号 （拿出一个origin）
-		for (int destination = 0; destination < m_Origin[origin]->DestinationNode.size(); destination++) //取出一个OD pair
-		{
-			int ODNumber = m_Origin[origin]->ODpairNumber[destination];
-			for (int route = 0; route < m_nRoute; route++)
-			{
-				if (ODNumber == m_Route[route]->ODID) //如果对于一个ODpair，找到了该ODpair对应的route
-				{
+	////调整route数量s//
+	//for (int origin = 0; origin < m_nOrigin; origin++) // 遍历origin的循环all or nothing
+	//{
+	//	//int OriginNode = m_Origin[origin]->pOriginNode->ID; // 任意一个origin的编号 （拿出一个origin）
+	//	for (int destination = 0; destination < m_Origin[origin]->DestinationNode.size(); destination++) //取出一个OD pair
+	//	{
+	//		int ODNumber = m_Origin[origin]->ODpairNumber[destination];
+	//		for (int route = 0; route < m_nRoute; route++)
+	//		{
+	//			if (ODNumber == m_Route[route]->ODID) //如果对于一个ODpair，找到了该ODpair对应的route
+	//			{
 
-				}
-			}
-		}
-	}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 //assign all-or-nothing
@@ -3190,7 +3208,6 @@ void CNetwork::GAProgram()
 	cout << "Link: " << m_nLink << endl;
 	cout << "OD: " << m_nODpair << endl;
 	cout << "depot: " << m_nDepot << endl;
-	system("pause");
 	//Lower-level
 	for (int sol = 0; sol < m_nSolution; sol++)
 		//for (int sol = 0; sol < 1; sol++)
@@ -3231,8 +3248,8 @@ void CNetwork::GAProgram()
 		}
 		
 		GenerateRoute();//为每一对OD生成route
-		//cout << m_nODpair << endl;
-		//cout << m_nRoute << endl;
+		cout << "m_nODpair: " << m_nODpair << endl;
+		cout << "m_nRoute: " << m_nRoute << endl;
 		if (temp_do != 0)
 		{
 			////////////////////////////////////////UE////////////////////////////////////////
@@ -3429,6 +3446,7 @@ void CNetwork::GAProgram()
 					}
 					UEGap = sqrt(temp1) / temp2;
 				}
+				//cout << "UEGap: " << UEGap << endl;
 			}
 
 			//Calculate the objective value
@@ -4154,7 +4172,7 @@ void CNetwork::GAProgram()
 	}
 
 	//GA Program
-	for (int iter = 0; iter < 10000; iter++) //165 for 4-node network 200  for 5-node network 300 for 6-node network
+	for (int iter = 0; iter < 1000; iter++) //165 for 4-node network 200  for 5-node network 300 for 6-node network
 	{
 		cout << "iter: " << iter << endl;
 		WheelSelect(); //根据foodnumber个父代, 选出foodnumber个子代
